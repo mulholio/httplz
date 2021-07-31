@@ -6,10 +6,32 @@ import (
 	"strconv"
 )
 
+func main() {
+	args := os.Args[1:]
+
+	if len(args) == 0 {
+		panic("You must pass a code to httplz in order to receive a result.")
+	}
+
+	code, err := strconv.ParseInt(args[0], 10, 16)
+	if err != nil {
+		panic("Status code passed must be an int")
+	}
+
+	statusCode, ok := codes[code]
+	if !ok {
+		panic("Could not find status code with that value")
+	}
+
+	fmt.Println(statusCode.Format())
+}
+
 type codeNumber = int64
+
 type statusCode struct {
-	Code              codeNumber
-	Name, Description string
+	Code        codeNumber
+	Name        string
+	Description string
 }
 
 func (sc statusCode) Format() string {
@@ -72,26 +94,4 @@ var codes = map[codeNumber]statusCode{
 	508: {508, "Loop Detected", "The server detected an infinite loop while processing the request."},
 	510: {510, "Not Extended", "Further extensions to the request are required for the server to fulfill it."},
 	511: {511, "Network Authentication Required", "The 511 status code indicates that the client needs to authenticate to gain network access."},
-}
-
-func main() {
-	args := os.Args[1:]
-
-	if len(args) == 0 {
-		panic("You must pass a code to httplz in order to receive a result.")
-	}
-
-	code := os.Args[1]
-
-	c, err := strconv.ParseInt(code, 10, 16)
-	if err != nil {
-		panic("Status code passed must be an int")
-	}
-
-	statusCode, ok := codes[c]
-	if !ok {
-		panic("Could not find status code with that value")
-	}
-
-	fmt.Println(statusCode.Format())
 }

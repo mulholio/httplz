@@ -75,11 +75,13 @@ var codes = map[codeNumber]statusCode{
 }
 
 func main() {
-	code := os.Args[1]
+	args := os.Args[1:]
 
-	if code == "" {
+	if len(args) == 0 {
 		panic("You must pass a code to httplz in order to receive a result.")
 	}
+
+	code := os.Args[1]
 
 	c, err := strconv.ParseInt(code, 10, 16)
 	if err != nil {

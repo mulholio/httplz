@@ -1,3 +1,3 @@
-module httplz.com/main
+module github.com/httplz
 
 go 1.16

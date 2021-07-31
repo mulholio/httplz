@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 )
 
-type codeNumber = int16
+type codeNumber = int64
 type statusCode struct {
 	Code              codeNumber
 	Name, Description string
@@ -19,7 +21,21 @@ var codes = map[codeNumber]statusCode{
 }
 
 func main() {
-	// TODO flags to read
-	c := codes[400]
-	fmt.Println(c.Format())
+	code := os.Args[1]
+
+	if code == "" {
+		panic("You must pass a code to httplz in order to receive a result.")
+	}
+
+	c, err := strconv.ParseInt(code, 10, 16)
+	if err != nil {
+		panic("Status code passed must be an int")
+	}
+
+	statusCode, ok := codes[c]
+	if !ok {
+		panic("Could not find status code with that value")
+	}
+
+	fmt.Println(statusCode.Format())
 }
